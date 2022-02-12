@@ -3,6 +3,10 @@
 //....
 <!-- [APP DEMO](https://luisbardev-cuestionario.herokuapp.com/) -->
 
+## Langs
+
+Laravel 8 + Vue 3 + Tailwind + Inertia
+
 ## Installation
 
 - composer install

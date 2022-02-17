@@ -1,3 +1,9 @@
+<script setup>
+import BreezeDropdown from "@/Components/Dropdown.vue";
+import BreezeDropdownLink from "@/Components/DropdownLink.vue";
+import isOpen from "@/utils/isOpen.js";
+</script>
+
 <template>
     <header
         class="sm:flex sm:items-center sm:justify-between px-6 py-4 bg-white border-b-4 border-[#004a77]"
@@ -6,7 +12,7 @@
         <div class="flex items-center justify-between">
             <div class="lg:hidden">
                 <button
-                    @click="isOpen = true"
+                    @click="isOpen = !isOpen"
                     class="text-gray-500 focus:outline-none"
                 >
                     <svg
@@ -171,11 +177,3 @@
         <!-- /vista sm -->
     </header>
 </template>
-
-<script setup>
-import BreezeDropdown from "@/Components/Dropdown.vue";
-import BreezeDropdownLink from "@/Components/DropdownLink.vue";
-// import BreezeNavLink from "@/Components/NavLink.vue";
-// import BreezeResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import isOpen from "@/utils/isOpen.js";
-</script>

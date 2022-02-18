@@ -35,6 +35,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // ----------------------
+// Ruta que responde al path de logos
+// ----------------------
+Route::get('/pathlogos', function () {
+    $path = env('APP_URL') . 'storage/' . config('brands.folder') . '/';
+    return response()->json($path);
+})->middleware(['auth', 'verified'])->name('path.logos');
+
+// ----------------------
 // Rutas de marcas
 // ----------------------
 Route::resource('/brands', BrandController::class)->middleware(['auth', 'verified']);

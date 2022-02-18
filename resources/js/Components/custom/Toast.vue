@@ -1,16 +1,26 @@
 <script setup>
+import {ref} from 'vue';
+
+// las props
 const { message } = defineProps({
     message: {
         type: String,
         default: "El mensaje",
     },
 });
+
+const showToast = ref(true);
+
+const closeToast = () => {
+    showToast.value = false;
+};
 </script>
 <template>
     <div
         id="toast-container"
         class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-800 bg-gray-100 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 absolute bottom-5 right-10"
         role="alert"
+        v-show="showToast"
     >
         <div
             class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200"
@@ -34,6 +44,7 @@ const { message } = defineProps({
             class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
             data-collapse-toggle="toast-container"
             aria-label="Close"
+            @click="closeToast"
         >
             <span class="sr-only">Cerrar</span>
             <svg

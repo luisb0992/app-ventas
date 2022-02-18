@@ -78,6 +78,7 @@ const inPage = (value) => {
                     :href="route('dashboard')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[inPage(appPages.dashboard) ? activeClass : inactiveClass]"
+                    @click="isOpen = !isOpen"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -99,6 +100,7 @@ const inPage = (value) => {
                     :href="route('brands.index')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[inPage(appPages.brands) ? activeClass : inactiveClass]"
+                    @click="isOpen = !isOpen"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -120,6 +122,7 @@ const inPage = (value) => {
                     :href="route('dashboard')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[inPage(appPages.graphics) ? activeClass : inactiveClass]"
+                    @click="isOpen = !isOpen"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -141,6 +144,7 @@ const inPage = (value) => {
                     :href="route('dashboard')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[inPage(appPages.sales) ? activeClass : inactiveClass]"
+                    @click="isOpen = !isOpen"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

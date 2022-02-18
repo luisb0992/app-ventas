@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateBrandRequest;
+use App\Http\Traits\BrandTrait;
 use App\Models\Brand;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
 class BrandController extends Controller
 {
+
+    use BrandTrait;
+
     /**
      * Rederiza el componente de listado de marcas
      *
@@ -18,7 +23,7 @@ class BrandController extends Controller
     public function index(): InertiaResponse
     {
         return Inertia::render('Brand/Index', [
-            'brands' => Brand::all(),
+            'brands' => Brand::getOrderBrands(),
         ]);
     }
 
@@ -35,25 +40,20 @@ class BrandController extends Controller
     /**
      * Crea un nuevo registro de marca
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return InertiaResponse
      */
-    public function store(Request $request): InertiaResponse
+    public function store(CreateBrandRequest $request): InertiaResponse
     {
-        $data = request()->all();
-        $filename = time() . '-' . $data['logo']->getClientOriginalName();
+        $data = $request->all();
 
-        // guardar el archivo en el storage
-        Storage::disk(env('FILESYSTEM_DRIVER'))->putFileAs(
-            config('brands.folder'),
-            $data['logo'],
-            $filename
-        );
-        // dd($data);
+        // Guardar el logo
+        $data['logo'] = $this->uploadFile($data['logo']);
+
+        // Guardar los datos de la marca
         Brand::create($data);
 
         return Inertia::render('Brand/Index', [
-            'brands' => Brand::all(),
+            'brands' => Brand::getOrderBrands(),
         ]);
     }
 
@@ -92,13 +92,17 @@ class BrandController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina de manera soft la marca seleccionada
      *
-     * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Brand  $brand    La marca a eliminar
+     * @return InertiaResponse                 Las marcas restantes
      */
-    public function destroy(Brand $brand)
+    public function destroy(Brand $brand): InertiaResponse
     {
-        //
+        $brand->delete();
+
+        return Inertia::render('Brand/Index', [
+            'brands' => Brand::getOrderBrands(),
+        ]);
     }
 }

@@ -8,7 +8,7 @@ const hasErrors = computed(() => Object.keys(errors.value).length > 0);
 </script>
 
 <template>
-    <div v-if="hasErrors">
+    <div v-if="hasErrors" class="animate-fade-in-down">
         <div class="font-medium text-red-600">Algo ha salido mal</div>
 
         <ul class="mt-3 list-none list-inside text-sm text-red-600">

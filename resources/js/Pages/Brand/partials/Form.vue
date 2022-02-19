@@ -1,55 +1,91 @@
 <script setup>
-import { computed, ref } from "vue";
-
-// componentes
-import Toast from "@/Components/custom/Toast.vue";
-import BreezeInput from "@/Components/Input.vue";
-import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
+// utils
+import { computed } from "vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 
-// objeto de la marca
-const { form } = defineProps({
+// componentes
+import BreezeInput from "@/Components/Input.vue";
+import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
+
+const { toast, form } = defineProps({
+    toast: {
+        type: Object,
+        description: "Objeto de configuración para el toast",
+    },
     form: {
         type: Object,
-        description: "Formulario de la marca",
+        description: "Objeto de configuración para el formulario",
     },
 });
 
-// mensaje para el toast
-const toastMessage = ref("");
-
-// mostrar o no un mensaje
-const showToast = ref(false);
-
 // evento submit para crear una nueva marca
+const submitBrand = () => {
+    if (form.update) {
+        updateBrand();
+    } else {
+        createBrand();
+    }
+};
+
+/**
+ * Crear una nueva marca
+ */
 const createBrand = () => {
     form.post(route("brands.store"), {
         onFinish: () => {
             if (!hasErrors.value) {
                 clearForm();
-                toastMessage.value = "Marca creada con éxito";
-                showToast.value = true;
+                toast.message = "Marca creada con éxito";
+                toast.bg = "bg-green-600";
+                toast.show = true;
                 setTimeout(() => {
-                    showToast.value = false;
-                }, 3000);
+                    toast.show = false;
+                }, 5000);
             }
 
-            closeErrors();
+            cleanErrors();
             hasErrors.value = false;
         },
         onError: () => {
-            closeErrors();
+            cleanErrors();
+        },
+    });
+};
+
+/**
+ * Actualizar una marca
+ */
+const updateBrand = () => {
+    form.post(route("brands.updateAll", form.id), {
+        onFinish: () => {
+            if (!hasErrors.value) {
+                clearForm();
+                toast.message = "Marca actualizada con éxito";
+                toast.bg = "bg-green-600";
+                toast.show = true;
+                setTimeout(() => {
+                    toast.show = false;
+                }, 5000);
+            }
+
+            cleanErrors();
+            hasErrors.value = false;
+        },
+        onError: () => {
+            cleanErrors();
         },
     });
 };
 
 // limpiar formulario
 const clearForm = () => {
+    form.id = "";
     form.name = "";
     form.logo = "";
     form.email_one = "";
     form.email_two = "";
     form.preview = "";
+    form.update = false;
 };
 
 // validar el archivo seleccionado
@@ -73,9 +109,8 @@ const fileIsValidate = (file) => {
             preview: "El archivo debe ser una imagen",
         };
 
-        return closeErrors();
+        return cleanErrors();
     }
-
     return (form.preview = URL.createObjectURL(file));
 };
 
@@ -91,20 +126,24 @@ const hasErrors = computed(
 );
 
 // Limpiar errores
-const closeErrors = (time = 5000) => {
+const cleanErrors = (time = 5000) => {
     setTimeout(() => {
         usePage().props.value.errors = {};
     }, time);
 };
+
+// cierra el toast
+const closeToast = () => {
+    toast.show = false;
+};
 </script>
 
 <template>
-    <Toast :message="toastMessage" v-show="showToast" />
     <BreezeValidationErrors
         class="mb-4 bg-gray-50 border border-gray-200 rounded-lg py-6"
     />
     <div class="bg-blue-sales-1">
-        <form @submit.prevent="createBrand">
+        <form @submit.prevent="submitBrand">
             <div class="justify-center px-8 sm:px-12 py-10">
                 <p class="text-lg font-bold text-gray-200 mb-10">
                     Agregar marca
@@ -238,9 +277,23 @@ const closeErrors = (time = 5000) => {
                 <div class="mt-6">
                     <button
                         type="submit"
-                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-blue-sales-1 bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-sales-1 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 border-gray-200"
+                        :class="
+                            form.update
+                                ? 'bg-yellow-500 text-gray-800 hover:bg-yellow-600 hover:text-gray-900'
+                                : 'bg-white text-blue-sales-1 hover:bg-gray-100 hover:text-blue-sales-1'
+                        "
                     >
-                        Guardar
+                        <span v-if="form.update">Actualizar</span>
+                        <span v-else>Guardar</span>
+                    </button>
+                    <button
+                        v-if="form.update"
+                        @click="clearForm"
+                        type="button"
+                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 border-gray-200 animate-fade-in-down bg-white text-blue-sales-1 hover:bg-gray-100 hover:text-blue-sales-1"
+                    >
+                        <span>Limpiar</span>
                     </button>
                 </div>
             </div>

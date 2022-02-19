@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BrandController;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -46,3 +47,13 @@ Route::get('/pathlogos', function () {
 // Rutas de marcas
 // ----------------------
 Route::resource('/brands', BrandController::class)->middleware(['auth', 'verified']);
+Route::post('/brands/update/{brand}', [BrandController::class, 'update'])
+    ->middleware(['auth', 'verified'])
+    ->name('brands.updateAll');
+
+// ----------------------
+// Ruta para obtener logo
+// ----------------------
+Route::get('/get/logo/{brand}', [BrandController::class, 'getLogo'])
+    ->middleware(['auth', 'verified'])
+    ->name('get.logo');

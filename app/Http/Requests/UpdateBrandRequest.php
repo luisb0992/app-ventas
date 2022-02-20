@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Brand;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBrandRequest extends FormRequest
 {
@@ -24,18 +25,12 @@ class UpdateBrandRequest extends FormRequest
      */
     public function rules()
     {
-        $idBrand = request()->get('id');
-        $logo = request()->file('logo');
-        // dd(
-        //     $logo,
-        //     // $logo->getClientOriginalName(),
-        //     // $logo->getClientOriginalExtension(),
-        //     // $logo->getClientMimeType(),
-        //     // $logo->getRealPath(),
-        // );
+        $data = request()->all();
+        $isLogoRequired = $data['logo']->getClientOriginalName() !== Brand::find($data['id'])->logo;
+
         return [
-            'name' => "required|max:250|unique:brands,name,{$idBrand},id,deleted_at,NULL",
-            'logo' => 'required|file|max:2048',
+            'name' => "required|max:250|unique:brands,name,{$data['id']},id,deleted_at,NULL",
+            'logo' => Rule::requiredIf($isLogoRequired).'|file',
             'email_one' => 'required|email',
             'email_two' => 'required|email',
         ];

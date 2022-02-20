@@ -2,6 +2,8 @@
 // utils
 import { computed } from "vue";
 import { usePage } from "@inertiajs/inertia-vue3";
+import { clearForm } from "@/Pages/Brand/utils/useForm.js";
+import clearAppErrors from "@/utils/clearAppErrors.js";
 
 // componentes
 import BreezeInput from "@/Components/Input.vue";
@@ -18,24 +20,25 @@ const { toast, form } = defineProps({
     },
 });
 
-// evento submit para crear una nueva marca
+// evento submit para crear o actualizar una marca
 const submitBrand = () => {
+
+    let path = '';
     if (form.update) {
-        updateBrand();
+        // updateBrand();
+        path = route("brands.updateAll", form.id);
+        toast.message = "Marca actualizada con éxito";
     } else {
-        createBrand();
+        path = route("brands.store");
+        toast.message = "Marca creada con éxito";
+        // createBrand();
     }
-};
 
-/**
- * Crear una nueva marca
- */
-const createBrand = () => {
-    form.post(route("brands.store"), {
+    form.post(path, {
         onFinish: () => {
             if (!hasErrors.value) {
                 clearForm();
-                toast.message = "Marca creada con éxito";
+                // toast.message = "Marca creada con éxito";
                 toast.bg = "bg-green-600";
                 toast.show = true;
                 setTimeout(() => {
@@ -43,49 +46,13 @@ const createBrand = () => {
                 }, 5000);
             }
 
-            cleanErrors();
+            clearAppErrors();
             hasErrors.value = false;
         },
         onError: () => {
-            cleanErrors();
+            clearAppErrors();
         },
     });
-};
-
-/**
- * Actualizar una marca
- */
-const updateBrand = () => {
-    form.post(route("brands.updateAll", form.id), {
-        onFinish: () => {
-            if (!hasErrors.value) {
-                clearForm();
-                toast.message = "Marca actualizada con éxito";
-                toast.bg = "bg-green-600";
-                toast.show = true;
-                setTimeout(() => {
-                    toast.show = false;
-                }, 5000);
-            }
-
-            cleanErrors();
-            hasErrors.value = false;
-        },
-        onError: () => {
-            cleanErrors();
-        },
-    });
-};
-
-// limpiar formulario
-const clearForm = () => {
-    form.id = "";
-    form.name = "";
-    form.logo = "";
-    form.email_one = "";
-    form.email_two = "";
-    form.preview = "";
-    form.update = false;
 };
 
 // validar el archivo seleccionado
@@ -109,7 +76,7 @@ const fileIsValidate = (file) => {
             preview: "El archivo debe ser una imagen",
         };
 
-        return cleanErrors();
+        return clearAppErrors();
     }
     return (form.preview = URL.createObjectURL(file));
 };
@@ -124,13 +91,6 @@ const deleteLogo = () => {
 const hasErrors = computed(
     () => Object.keys(usePage().props.value.errors).length > 0
 );
-
-// Limpiar errores
-const cleanErrors = (time = 5000) => {
-    setTimeout(() => {
-        usePage().props.value.errors = {};
-    }, time);
-};
 
 // cierra el toast
 const closeToast = () => {

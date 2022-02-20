@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateBrandRequest extends FormRequest
+class CreateSaleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,11 @@ class CreateBrandRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:250|unique:brands,name,NULL,id,deleted_at,NULL',
-            'logo' => 'required|file|mimes:jpg,bmp,png,jpeg,svg|max:2048',
-            'email_one' => 'required|email',
-            'email_two' => 'required|email',
+            'service'   => 'required|min:3|max:250',
+            'count'     => 'required|numeric|min:1',
+            'amount'    => 'required|numeric|min:1',
+            'client'    => 'required|min:3|max:250',
+            'voucher'   => 'required|file|max:10024',
         ];
     }
 }

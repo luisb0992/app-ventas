@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Brand extends Model
@@ -24,10 +25,21 @@ class Brand extends Model
      */
     protected $fillable = [
         'name',
+        'slug',
         'logo',
         'email_one',
         'email_two'
     ];
+
+    /**
+     * Devuelve las ventas de la marca
+     *
+     * @return HasMany    Las ventas de la marca
+     */
+    public function sales(): HasMany
+    {
+        return $this->hasMany(Sale::class);
+    }
 
     /**
      * Devuelve las marcas ordenadas
@@ -37,5 +49,15 @@ class Brand extends Model
     public static function getOrderBrands(): Collection
     {
         return self::orderBy('id', 'desc')->get();
+    }
+
+    /**
+     * Busca la marca por el slug indicado
+     *
+     * @return Self     La marca
+     */
+    public static function getBrandForSlug(string $slug): ?Brand
+    {
+        return self::where('slug', $slug)->first();
     }
 }

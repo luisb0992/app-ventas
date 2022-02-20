@@ -3,14 +3,17 @@
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import Toast from "@/Components/custom/Toast.vue";
 import Form from "@/Pages/Brand/partials/Form.vue";
-import Spinner from '@/Components/custom/Spinner.vue';
+import Spinner from "@/Components/custom/Spinner.vue";
 import Delete from "@/Pages/Brand/partials/Delete.vue";
 import Edit from "@/Pages/Brand/partials/Edit.vue";
+import { Link } from "@inertiajs/inertia-vue3";
 
 // utils
 import { reactive } from "vue";
-import { Head, useForm } from "@inertiajs/inertia-vue3";
+import { Head } from "@inertiajs/inertia-vue3";
 import pathLogos from "@/utils/pathLogos.js";
+import { form } from "@/Pages/Brand/utils/useForm.js";
+import toast from '@/utils/toastMessage.js';
 
 // listado de props
 const { brands } = defineProps({
@@ -18,24 +21,6 @@ const { brands } = defineProps({
         type: Array,
         description: "lista de marcas",
     },
-});
-
-// objeto del formulario global
-const form = useForm({
-    id: "",
-    name: "",
-    logo: "",
-    email_one: "",
-    email_two: "",
-    preview: "",
-    update: false,
-});
-
-// configuración entre componentes para toast
-const toast = reactive({
-    show: false,
-    message: "",
-    bg: "",
 });
 
 // configuración entre componentes para el spinner
@@ -73,9 +58,9 @@ const spinner = reactive({
                         <div
                             class="col-span-2 mx-auto rounded-lg text-center h-max"
                         >
-                            <Spinner class="mb-4" v-show="spinner.show"/>
+                            <Spinner class="mb-4" v-show="spinner.show" />
                             <!-- formulario -->
-                            <Form :toast="toast" :form="form"/>
+                            <Form :toast="toast" :form="form" />
                             <!-- /formulario -->
                         </div>
                         <!-- /base de formulario -->
@@ -88,19 +73,33 @@ const spinner = reactive({
                                 :key="brand.id"
                             >
                                 <div class="flex flex-col items-center">
-                                    <img
-                                        class="mb-3 w-24 h-24 rounded-full shadow-lg"
-                                        :src="pathLogos + brand.logo"
-                                        alt="Logo brand"
-                                    />
-                                    <h3
-                                        class="mb-1 text-xl font-medium text-gray-900 dark:text-white"
+                                    <Link
+                                        :href="route('brands.show', brand.id)"
+                                        class="md:inline-flex items-center border-indigo-400 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out"
                                     >
-                                        {{ brand.name }}
-                                    </h3>
+                                        <img
+                                            class="mb-3 w-24 h-24 rounded-full shadow-lg md:mr-4"
+                                            :src="pathLogos + brand.logo"
+                                            alt="Logo Marca"
+                                        />
+                                        <h3
+                                            class="mb-1 text-gray-900 dark:text-white lg:text-lg xl:text-lg font-medium sm:hidden xl:block text-center hover:text-blue-sales-1"
+                                        >
+                                            {{ brand.name }}
+                                        </h3>
+                                    </Link>
                                     <div class="flex mt-4 space-x-3">
-                                        <Edit :id="brand.id" :toast="toast" :form="form" :spinner="spinner" />
-                                        <Delete :id="brand.id" :toast="toast" :form="form"/>
+                                        <Edit
+                                            :id="brand.id"
+                                            :toast="toast"
+                                            :form="form"
+                                            :spinner="spinner"
+                                        />
+                                        <Delete
+                                            :id="brand.id"
+                                            :toast="toast"
+                                            :form="form"
+                                        />
                                     </div>
                                 </div>
                             </div>

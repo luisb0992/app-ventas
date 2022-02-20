@@ -1,21 +1,18 @@
 <?php
 
-use App\Http\Controllers\BrandController;
-use App\Models\Brand;
+use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-*/
 
 // ----------------------
 // rutas de autenticación
 // ----------------------
 require __DIR__ . '/auth.php';
+
+// ----------------------
+// rutas de marcas
+// ----------------------
+require __DIR__ . '/brand.php';
 
 // ----------------------
 // ruta de inicio
@@ -36,24 +33,17 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // ----------------------
-// Ruta que responde al path de logos
+// Rutas de ventas
 // ----------------------
-Route::get('/pathlogos', function () {
-    $path = env('APP_URL') . 'storage/' . config('brands.folder') . '/';
-    return response()->json($path);
-})->middleware(['auth', 'verified'])->name('path.logos');
+Route::resource('/sales', SaleController::class)->middleware(['auth', 'verified']);
 
-// ----------------------
-// Rutas de marcas
-// ----------------------
-Route::resource('/brands', BrandController::class)->middleware(['auth', 'verified']);
-Route::post('/brands/update/{brand}', [BrandController::class, 'update'])
-    ->middleware(['auth', 'verified'])
-    ->name('brands.updateAll');
+// ---------------------------------------------------
+// Ruta para la creación de una venta desde una marca
+// ---------------------------------------------------
+Route::get('/sales/brand/{slug}', [SaleController::class, 'createWithBrand'])->name('sales.createWithBrand');
 
-// ----------------------
-// Ruta para obtener logo
-// ----------------------
-Route::get('/get/logo/{brand}', [BrandController::class, 'getLogo'])
-    ->middleware(['auth', 'verified'])
-    ->name('get.logo');
+// ---------------------------------------------------
+// Ruta para guardar una venta desde una marca
+// ---------------------------------------------------
+Route::post('/sales/brand/{brand}', [SaleController::class, 'saveWithBrand'])->name('sales.saveWithBrand');
+

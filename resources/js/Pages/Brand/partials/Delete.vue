@@ -1,7 +1,8 @@
 <script setup>
 // utlis
-import { useForm } from "@inertiajs/inertia-vue3";
 import { ref } from "vue";
+import { clearForm } from "@/Pages/Brand/utils/useForm.js";
+import clearAppErrors from "@/utils/clearAppErrors.js";
 
 // componentes
 import Confirm from "@/Components/custom/Confirm.vue";
@@ -22,26 +23,8 @@ const { id, toast, form } = defineProps({
     },
 });
 
-// limpiar formulario
-const clearForm = () => {
-    form.id = "";
-    form.name = "";
-    form.logo = "";
-    form.email_one = "";
-    form.email_two = "";
-    form.preview = "";
-    form.update = false;
-};
-
 // mostrar o no el modal de confirmación
 const showConfirm = ref(false);
-
-// limpiar los errores de la app
-const clearErrors = (time = 5000) => {
-    setTimeout(() => {
-        usePage().props.value.errors = {};
-    }, time);
-};
 
 // abrir el modal de confirmación
 const confirmDelete = (id) => {
@@ -76,7 +59,7 @@ const deleteBrand = () => {
             showConfirm.value = false;
 
             // limpiar errores
-            clearErrors();
+            clearAppErrors();
         },
     });
 };

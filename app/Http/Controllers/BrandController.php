@@ -50,6 +50,9 @@ class BrandController extends Controller
         // Guardar y getear el nombre el logo
         $data['logo'] = $this->uploadFile($data['logo']);
 
+        // slug
+        $data['slug'] = $this->createSlug($data['name']);
+
         // Guardar los datos de la marca
         Brand::create($data);
 
@@ -79,12 +82,10 @@ class BrandController extends Controller
         $data = $request->all();
 
         // Guardar y getear el nombre el logo
-        // si se esta recibiendo un logo distinto
-        if ($data['logo']->getClientOriginalName() === $brand->logo) {
-            $data['logo'] = $brand->logo;
-        } else {
-            $data['logo'] = $this->uploadFile($data['logo']);
-        }
+        $data['logo'] = $this->updateOrNotLogo($data['logo'], $brand);
+
+        // slug
+        $data['slug'] = $this->updateOrNotSlug($data['name'], $brand);
 
         // actualizar los datos de la marca
         $brand->update($data);
@@ -100,6 +101,10 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand): RedirectResponse
     {
+        // eliminar el logo
+        $this->deleteBrandLogo($brand);
+
+        // eliminar la marca
         $brand->delete();
 
         return Redirect::route('brands.index');

@@ -3,7 +3,7 @@
 /**
  * Configuración para las marcas agregadas
  *
- * @author luishbardev <luisbardev@gmail.com> <luisbardev.com>
+ * @author luisbardev <luisbardev@gmail.com> <luisbardev.com>
  */
 
 return [
@@ -15,4 +15,15 @@ return [
     |
     */
     'folder' => 'brands/logos',
+
+    /*
+    |--------------------------------------------------------------------------
+    | El tamaño máximo para el slug
+    |--------------------------------------------------------------------------
+    |
+    */
+    'slug' => [
+        'max' => 50,
+        'min' => 3,
+    ],
 ];

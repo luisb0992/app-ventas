@@ -2,6 +2,7 @@
 // utils
 import { usePage } from "@inertiajs/inertia-vue3";
 import pathLogos from "@/utils/pathLogos.js";
+import { clearForm } from "@/Pages/Brand/utils/useForm.js";
 
 // props
 const { id, toast, form, spinner } = defineProps({
@@ -22,16 +23,6 @@ const { id, toast, form, spinner } = defineProps({
         description: "Objeto de configuración para el spinner",
     },
 });
-
-// limpiar formulario
-const clearForm = () => {
-    form.id = "";
-    form.name = "";
-    form.logo = "";
-    form.email_one = "";
-    form.email_two = "";
-    form.preview = "";
-};
 
 /**
  * Cargar los datos al formulario

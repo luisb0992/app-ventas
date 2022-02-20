@@ -2,116 +2,35 @@
 // componentes
 import BreezeGuestLayout from "@/Layouts/Guest.vue";
 import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
-import Toast from '@/Components/custom/Toast.vue';
+import Toast from "@/Components/custom/Toast.vue";
+import Loading from "@/Components/custom/Loading.vue";
 
-// utils
+// utils - path para el logo de la marca
 import pathLogos from "@/utils/pathLogos.js";
-import { useForm, usePage } from "@inertiajs/inertia-vue3";
-import allFormats from "@/Pages/Sale/utils/validFormat.js";
-import clearAppErrors from "@/utils/clearAppErrors";
-import hasErrors from "@/utils/hasAppErrors.js";
-import toast from "@/utils/toastMessage.js";
 
-const { brand } = defineProps({
+// main de configuración para la creación de una venta
+import {
+    form,
+    validateFile,
+    createSale,
+    toastMessage as toast,
+    loading,
+} from "@/Pages/Sale/utils/create.js";
+
+// Funciones varias de utilidad
+import {
+    calculateSizeInMB,
+    substr,
+    replaceWordImage,
+} from "@/utils/functions.js";
+
+// props
+defineProps({
     brand: {
         type: Object,
         description: "La marca asociada a la venta",
     },
 });
-
-// formulario de datos
-const form = useForm({
-    service: "",
-    count: "",
-    amount: "",
-    client: "",
-    voucher: "",
-});
-
-// limpiar el formulario
-const clearForm = () => {
-    form.service = "";
-    form.count = "";
-    form.amount = "";
-    form.client = "";
-    form.voucher = "";
-};
-
-/**
- * Crea una nueva venta
- */
-const createSale = () => {
-    form.post(route("sales.saveWithBrand", brand.id), {
-        onFinish: () => {
-            if (!hasErrors.value) {
-                clearForm();
-                toast.message = "Venta guardada con éxito";
-                toast.bg = "bg-green-600";
-                toast.show = true;
-                setTimeout(() => {
-                    toast.show = false;
-                }, 5000);
-            }
-            clearAppErrors();
-            hasErrors.value = false;
-        },
-        onError: () => {
-            clearAppErrors();
-        },
-    });
-};
-
-// toast.show = true;
-// console.log(toast);
-/**
- * Recortar un string
- *
- * @param {string} value
- * @param {number} longitud
- */
-const substr = (value, longitud = 10) => {
-    return value.substr(0, longitud) + "...";
-};
-
-/**
- * Calcular el tamaño de un archivo en mb
- *
- * @param {number} value
- */
-const calculateSizeInMB = (value) => {
-    return (value / 1024 / 1024).toFixed(2);
-};
-
-/**
- * Devuelve un string sin la palabra "image/"
- *
- * @param {string} value
- */
-const replaceWordImage = (value) => {
-    return value.replace("image/", "");
-};
-
-/**
- * Valida que el archivo seleccionado sea
- * uno de los listados en allFormats
- *
- * @param {File} file
- */
-const validateFile = (file) => {
-    const { type } = file;
-
-    if (!allFormats.includes(type)) {
-        form.voucher = "";
-        usePage().props.value.errors = {
-            comprobante:
-                "El archivo seleccionado no es válido, intente con uno de los siguientes formatos: pdf, imagen, doc, txt",
-        };
-        clearAppErrors();
-        return false;
-    }
-
-    return true;
-};
 </script>
 <template>
     <BreezeGuestLayout>
@@ -124,9 +43,9 @@ const validateFile = (file) => {
             :show="toast.show"
         />
 
-        <div>
+        <div class="pb-6 w-full">
             <div
-                class="dark:bg-gray-800 dark:border-gray-700 px-2 py-4 w-full mb-3 mx-auto animate-fade-in-down"
+                class="dark:bg-gray-800 dark:border-gray-700 px-2 py-4 mb-3 mx-auto animate-fade-in-down"
             >
                 <div class="inline-flex items-center justify-center">
                     <img
@@ -144,9 +63,10 @@ const validateFile = (file) => {
             <BreezeValidationErrors
                 class="mb-4 bg-gray-50 border border-gray-200 rounded-lg py-6 px-4"
             />
-            <form @submit.prevent="createSale">
+            <form @submit.prevent="createSale(brand.id)" :class="loading.show ? 'opacity-50' : 'opacity-100'">
                 <div class="relative z-0 mb-6 w-full group">
                     <input
+                        :disabled="loading.show"
                         autofocus
                         type="text"
                         v-model.trim="form.service"
@@ -164,6 +84,7 @@ const validateFile = (file) => {
                 </div>
                 <div class="relative z-0 mb-6 w-full group">
                     <input
+                        :disabled="loading.show"
                         type="number"
                         v-model.number="form.count"
                         step="1"
@@ -182,6 +103,7 @@ const validateFile = (file) => {
                 </div>
                 <div class="relative z-0 mb-6 w-full group">
                     <input
+                        :disabled="loading.show"
                         type="number"
                         v-model.number="form.amount"
                         step="0.01"
@@ -200,6 +122,7 @@ const validateFile = (file) => {
                 </div>
                 <div class="relative z-0 mb-6 w-full group">
                     <input
+                        :disabled="loading.show"
                         type="text"
                         v-model.trim="form.client"
                         id="cliente"
@@ -214,7 +137,7 @@ const validateFile = (file) => {
                         Cliente
                     </label>
                 </div>
-                <div class="relative z-0 mb-56 w-full">
+                <div class="relative z-0 mb-64 w-full">
                     <div class="absolute w-[340px]">
                         <label class="inline-block mb-2 text-gray-500">
                             Comprobante
@@ -322,6 +245,7 @@ const validateFile = (file) => {
                                     </p>
                                 </div>
                                 <input
+                                    :disabled="loading.show"
                                     type="file"
                                     class="opacity-0"
                                     @input="
@@ -330,16 +254,35 @@ const validateFile = (file) => {
                                     @change="validateFile(form.voucher)"
                                 />
                             </label>
+                            <p
+                                class="text-base tracking-wider text-gray-600 text-center"
+                            >
+                                <small class="inline-flex"
+                                    >Archivos admitidos: imagen, pdf, doc, csv,
+                                    xml, txt</small
+                                >
+                                <small>Max: 10 GB</small>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center justify-center mt-4">
+                <div class="flex items-center justify-center">
                     <button
+                        :disabled="loading.show"
                         type="submit"
-                        class="text-white bg-blue-sales-1 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-lg w-full sm:w-auto px-7 py-3.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        :class="
+                            loading.show
+                                ? 'bg-gray-800 hover:bg-gray-700'
+                                : 'bg-blue-sales-1 hover:bg-blue-900'
+                        "
+                        class="text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-lg w-full sm:w-auto px-7 py-3.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                         Enviar
                     </button>
+                    <Loading
+                        class="flex items-center justify-center animate-fade-in-down"
+                        v-show="loading.show"
+                    />
                 </div>
             </form>
         </div>

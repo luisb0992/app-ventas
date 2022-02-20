@@ -1,3 +1,10 @@
+/**
+ * Array de datos de formatos compatibles con la app
+ * para la subida de comprobantes
+ *
+ * @author Luisbardev <luisbardev@gmail.com> luisbardev.com
+ */
+
 const allFormats = [
     "application/msword",
     "application/pdf",

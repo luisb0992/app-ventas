@@ -22,8 +22,7 @@ const { toast, form } = defineProps({
 
 // evento submit para crear o actualizar una marca
 const submitBrand = () => {
-
-    let path = '';
+    let path = "";
     if (form.update) {
         // updateBrand();
         path = route("brands.updateAll", form.id);

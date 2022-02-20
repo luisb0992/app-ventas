@@ -5,14 +5,10 @@ import pathLogos from "@/utils/pathLogos.js";
 import { clearForm } from "@/Pages/Brand/utils/useForm.js";
 
 // props
-const { id, toast, form, spinner } = defineProps({
+const { id, form, spinner } = defineProps({
     id: {
         type: Number,
         description: "id de la marca",
-    },
-    toast: {
-        type: Object,
-        description: "Objeto de configuración para el toast",
     },
     form: {
         type: Object,
@@ -27,53 +23,59 @@ const { id, toast, form, spinner } = defineProps({
 /**
  * Cargar los datos al formulario
  */
-const loadFormWithData = (id) => {
+const loadFormWithData = () => {
     const brands = usePage().props.value.brands;
     const brand = brands.find((brand) => brand.id === id);
 
     if (brand && typeof brand === "object") {
-
         // limpiar previamente el formulario
         clearForm();
 
         // crear el logo de la marca como archivo file
         createFile(brand);
-
-        // cargar el formulario con los datos de la marca
-        form.id = brand.id;
-        form.name = brand.name;
-        form.email_one = brand.email_one;
-        form.email_two = brand.email_two;
-        form.preview = `${pathLogos.value + brand.logo}`;
-        form.update = true;
-
     }
 };
 
 /**
  * Crear el logo de la marca como archivo file
  */
-const createFile = ({id, logo}) => {
+const createFile = ({ id, logo, name, email_one, email_two }) => {
     spinner.show = true;
-    axios.get(route("get.logo", id)).then((response) => {
-        const data = response.data;
-        if (data) {
-            const blob = new Blob([data], {
-                type: response.headers["content-type"],
-            });
-            const file = new File([blob], logo, {
-                type: response.headers["content-type"],
-            });
-            form.logo = file;
+    axios
+        .get(route("get.logo", id))
+        .then((response) => {
+            const data = response.data;
+            if (data) {
+                const blob = new Blob([data], {
+                    type: response.headers["content-type"],
+                });
+                const file = new File([blob], logo, {
+                    type: response.headers["content-type"],
+                });
+                form.logo = file;
+
+                // cargar el formulario con los datos de la marca
+                form.id = id;
+                form.name = name;
+                form.email_one = email_one;
+                form.email_two = email_two;
+                form.preview = `${pathLogos.value + logo}`;
+                form.update = true;
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        .finally(() => {
             spinner.show = false;
-        }
-    });
+        });
 };
 </script>
 
 <template>
     <button
-        @click="loadFormWithData(id)"
+        :disabled="spinner.show"
+        @click="loadFormWithData"
         type="button"
         class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900 inline-flex items-center"
     >

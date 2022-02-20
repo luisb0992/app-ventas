@@ -60,7 +60,7 @@ const spinner = reactive({
                         >
                             <Spinner class="mb-4" v-show="spinner.show" />
                             <!-- formulario -->
-                            <Form :toast="toast" :form="form" />
+                            <Form :toast="toast" :form="form" :class="spinner.show ? 'opacity-50' : 'opacity-100'"/>
                             <!-- /formulario -->
                         </div>
                         <!-- /base de formulario -->
@@ -91,7 +91,6 @@ const spinner = reactive({
                                     <div class="flex mt-4 space-x-3">
                                         <Edit
                                             :id="brand.id"
-                                            :toast="toast"
                                             :form="form"
                                             :spinner="spinner"
                                         />

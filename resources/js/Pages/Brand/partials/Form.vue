@@ -1,6 +1,6 @@
 <script setup>
 // utils
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 import { clearForm } from "@/Pages/Brand/utils/useForm.js";
 import clearAppErrors from "@/utils/clearAppErrors.js";
@@ -8,6 +8,7 @@ import clearAppErrors from "@/utils/clearAppErrors.js";
 // componentes
 import BreezeInput from "@/Components/Input.vue";
 import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
+import Loading from '@/Components/custom/Loading.vue';
 
 const { toast, form } = defineProps({
     toast: {
@@ -20,24 +21,26 @@ const { toast, form } = defineProps({
     },
 });
 
+// mostrar o no el loading
+const loading = reactive({
+    show: false
+});
+
 // evento submit para crear o actualizar una marca
 const submitBrand = () => {
     let path = "";
     if (form.update) {
-        // updateBrand();
         path = route("brands.updateAll", form.id);
         toast.message = "Marca actualizada con éxito";
     } else {
         path = route("brands.store");
         toast.message = "Marca creada con éxito";
-        // createBrand();
     }
 
     form.post(path, {
         onFinish: () => {
             if (!hasErrors.value) {
                 clearForm();
-                // toast.message = "Marca creada con éxito";
                 toast.bg = "bg-green-600";
                 toast.show = true;
                 setTimeout(() => {
@@ -47,9 +50,14 @@ const submitBrand = () => {
 
             clearAppErrors();
             hasErrors.value = false;
+            loading.show = false;
         },
         onError: () => {
+            loading.show = false;
             clearAppErrors();
+        },
+        onProgress: () => {
+            loading.show = true;
         },
     });
 };
@@ -102,7 +110,7 @@ const closeToast = () => {
         class="mb-4 bg-gray-50 border border-gray-200 rounded-lg py-6"
     />
     <div class="bg-blue-sales-1">
-        <form @submit.prevent="submitBrand">
+        <form @submit.prevent="submitBrand" :class="loading.show ? 'opacity-50' : 'opacity-100'">
             <div class="justify-center px-8 sm:px-12 py-10">
                 <p class="text-lg font-bold text-gray-200 mb-10">
                     Agregar marca
@@ -142,6 +150,7 @@ const closeToast = () => {
                                     </div>
                                 </div>
                                 <input
+                                    :disabled="loading.show"
                                     type="file"
                                     class="h-full w-full opacity-0"
                                     @input="form.logo = $event.target.files[0]"
@@ -156,6 +165,7 @@ const closeToast = () => {
                             :src="form.preview"
                         />
                         <button
+                            :disabled="loading.show"
                             @click="deleteLogo"
                             type="button"
                             class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
@@ -196,6 +206,7 @@ const closeToast = () => {
                 <!-- input nombre marca -->
                 <div class="mt-6">
                     <BreezeInput
+                        :disabled="loading.show"
                         id="brand"
                         type="text"
                         class="block py-2.5 px-0 w-full text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600"
@@ -210,6 +221,7 @@ const closeToast = () => {
                 <!-- email 1 -->
                 <div class="mt-6">
                     <BreezeInput
+                        :disabled="loading.show"
                         id="brand"
                         type="email"
                         class="block py-2.5 px-0 w-full text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600"
@@ -223,6 +235,7 @@ const closeToast = () => {
                 <!-- email 2 -->
                 <div class="mt-6">
                     <BreezeInput
+                        :disabled="loading.show"
                         id="brand"
                         type="email"
                         class="block py-2.5 px-0 w-full text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600"
@@ -233,8 +246,9 @@ const closeToast = () => {
                 </div>
                 <!-- /email 2 -->
 
-                <div class="mt-6">
+                <div class="mt-6 inline-flex">
                     <button
+                        :disabled="loading.show"
                         type="submit"
                         class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 border-gray-200"
                         :class="
@@ -247,6 +261,7 @@ const closeToast = () => {
                         <span v-else>Guardar</span>
                     </button>
                     <button
+                        :disabled="loading.show"
                         v-if="form.update"
                         @click="clearForm"
                         type="button"
@@ -254,6 +269,13 @@ const closeToast = () => {
                     >
                         <span>Limpiar</span>
                     </button>
+                    <Loading
+                        class="animate-fade-in-down text-white -mt-4"
+                        bg="bg-white"
+                        width="w-8"
+                        height="h-8"
+                        v-if="loading.show"
+                    />
                 </div>
             </div>
         </form>

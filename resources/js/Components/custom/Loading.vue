@@ -1,8 +1,27 @@
+<script setup>
+defineProps({
+    bg: {
+        type: String,
+        default: "bg-blue-sales-1",
+        description: "color de fondo",
+    },
+    width: {
+        type: String,
+        default: "w-20",
+        description: "ancho del componente",
+    },
+    height: {
+        type: String,
+        default: "h-20",
+        description: "alto del componente",
+    },
+});
+</script>
 <template>
     <div class="text-center">
-        <div class="lds-ripple">
-            <div></div>
-            <div></div>
+        <div class="lds-ripple" :class="width+' '+height">
+            <div :class="bg"></div>
+            <div :class="bg"></div>
         </div>
     </div>
 </template>
@@ -11,12 +30,10 @@
 .lds-ripple {
     display: inline-block;
     position: relative;
-    width: 80px;
-    height: 80px;
 }
 .lds-ripple div {
     position: absolute;
-    border: 4px solid #004a77;
+    border: 4px solid;
     opacity: 1;
     border-radius: 50%;
     animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;

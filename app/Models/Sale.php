@@ -12,6 +12,27 @@ class Sale extends Model
     use SoftDeletes;
 
     /**
+     * Divisa Dolar
+     *
+     * @const string
+     */
+    CONST CURRENCY_USD = '$';
+
+    /**
+     * Divisa Euro
+     *
+     * @const string
+     */
+    CONST CURRENCY_EURO = '€';
+
+    /**
+     * Divisa Bolívar
+     *
+     * @const string
+     */
+    CONST CURRENCY_BS = 'Bs';
+
+    /**
      * La tabla asociada al modelo.
      *
      * @var string
@@ -51,5 +72,25 @@ class Sale extends Model
     public function hasItBeenVerified(): bool
     {
         return $this->verified_at !== null;
+    }
+
+    /**
+     * Devuelve la cantidad en dólares
+     *
+     * @return string     La cantidad en dólares
+     */
+    public function getUsdAmountAttribute(): string
+    {
+        return number_format($this->amount, 2, ',', '.') . ' ' . self::CURRENCY_USD;
+    }
+
+    /**
+     * Devuelve la cantidad en bolivares
+     *
+     * @return string     La cantidad en dólares
+     */
+    public function getBsAmountAttribute(): string
+    {
+        return number_format($this->amount, 2, ',', '.') . ' ' . self::CURRENCY_BS;
     }
 }

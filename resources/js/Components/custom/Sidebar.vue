@@ -141,7 +141,7 @@ const inPage = (value) => {
                     <span class="mx-2">Gráficos</span>
                 </Link>
                 <Link
-                    :href="route('sales.createWithBrand', 'lg-life-good-forever-and-ever')"
+                    :href="route('sales.createWithBrand', 'asus')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[inPage(appPages.sales) ? activeClass : inactiveClass]"
                     @click="isOpen = !isOpen"

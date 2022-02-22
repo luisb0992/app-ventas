@@ -46,4 +46,3 @@ Route::get('/sales/brand/{slug}', [SaleController::class, 'createWithBrand'])->n
 // Ruta para guardar una venta desde una marca
 // ---------------------------------------------------
 Route::post('/sales/brand/{brand}', [SaleController::class, 'saveWithBrand'])->name('sales.saveWithBrand');
-

@@ -4,6 +4,7 @@ import BreezeGuestLayout from "@/Layouts/Guest.vue";
 import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
 import Toast from "@/Components/custom/Toast.vue";
 import Loading from "@/Components/custom/Loading.vue";
+import MessageFailed from "@/Components/custom/MessageFailed.vue";
 
 // utils - path para el logo de la marca
 import pathLogos from "@/utils/pathLogos.js";
@@ -30,6 +31,11 @@ defineProps({
         type: Object,
         description: "La marca asociada a la venta",
     },
+    failed: {
+        type: String,
+        default: "",
+        description: "Indica si la creación de la venta falló",
+    },
 });
 </script>
 <template>
@@ -45,9 +51,9 @@ defineProps({
 
         <div class="pb-6 w-full">
             <div
-                class="dark:bg-gray-800 dark:border-gray-700 px-2 py-4 mb-3 mx-auto animate-fade-in-down"
+                class="flex justify-center px-2 py-4 mb-3 animate-fade-in-down"
             >
-                <div class="inline-flex items-center justify-center">
+                <div class="inline-flex items-center">
                     <img
                         class="mb-3 w-24 h-24 rounded-full shadow-lg mr-4"
                         :src="pathLogos + brand.logo"
@@ -63,7 +69,14 @@ defineProps({
             <BreezeValidationErrors
                 class="mb-4 bg-gray-50 border border-gray-200 rounded-lg py-6 px-4"
             />
-            <form @submit.prevent="createSale(brand.id)" :class="loading.show ? 'opacity-50' : 'opacity-100'">
+            <MessageFailed
+                class="mb-4 bg-red-600 border border-red-500 text-gray-100 rounded-lg py-6 px-4 inline-flex items-center"
+                :failed="failed"
+            />
+            <form
+                @submit.prevent="createSale(brand.id)"
+                :class="loading.show ? 'opacity-50' : 'opacity-100'"
+            >
                 <div class="relative z-0 mb-6 w-full group">
                     <input
                         :disabled="loading.show"

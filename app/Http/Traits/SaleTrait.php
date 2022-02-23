@@ -24,7 +24,7 @@ trait SaleTrait
      * @param UploadedFile $file    Archivo subido
      * @return String               Nombre del archivo
      */
-    public function uploadFile(UploadedFile $file): String
+    public function uploadSaleFile(UploadedFile $file): String
     {
 
         // $file->getClientOriginalName();

@@ -16,21 +16,21 @@ class Sale extends Model
      *
      * @const string
      */
-    CONST CURRENCY_USD = '$';
+    const CURRENCY_USD = '$';
 
     /**
      * Divisa Euro
      *
      * @const string
      */
-    CONST CURRENCY_EURO = '€';
+    const CURRENCY_EURO = '€';
 
     /**
      * Divisa Bolívar
      *
      * @const string
      */
-    CONST CURRENCY_BS = 'Bs';
+    const CURRENCY_BS = 'Bs';
 
     /**
      * La tabla asociada al modelo.
@@ -75,13 +75,25 @@ class Sale extends Model
     }
 
     /**
+     * Marca una venta como verificada
+     *
+     * @return void
+     */
+    public function verifySale(): void
+    {
+        $this->update([
+            'verified_at' => now()
+        ]);
+    }
+
+    /**
      * Devuelve la cantidad en dólares
      *
      * @return string     La cantidad en dólares
      */
     public function getUsdAmountAttribute(): string
     {
-        return number_format($this->amount, 2, ',', '.') . ' ' . self::CURRENCY_USD;
+        return self::CURRENCY_USD . ' ' . number_format($this->amount, 2, ',', '.');
     }
 
     /**
@@ -91,6 +103,6 @@ class Sale extends Model
      */
     public function getBsAmountAttribute(): string
     {
-        return number_format($this->amount, 2, ',', '.') . ' ' . self::CURRENCY_BS;
+        return self::CURRENCY_BS . ' ' . number_format($this->amount, 2, ',', '.');
     }
 }

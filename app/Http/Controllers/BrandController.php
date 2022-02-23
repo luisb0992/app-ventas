@@ -19,6 +19,7 @@ use Inertia\Response as InertiaResponse;
 // utils
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Response;
+use App\Utils\AppRedirect;
 use Inertia\Inertia;
 
 class BrandController extends Controller
@@ -60,14 +61,17 @@ class BrandController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Devuelve toda la info de una marca
      *
-     * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
+     * @param  Brand  $brand        La marca
+     * @return InertiaResponse      Componente de la marca
      */
-    public function show(Brand $brand)
+    public function show(Brand $brand): InertiaResponse
     {
-        //
+        return AppRedirect::inertiaRender('Brand/Show', [
+            'brand' => $this->getSalesByBrand($brand),
+            'brands' => Brand::getOrderBrands(),
+        ]);
     }
 
     /**

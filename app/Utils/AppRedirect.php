@@ -8,6 +8,7 @@
 
 namespace App\Utils;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -103,5 +104,24 @@ class AppRedirect
 
     // la redirección al componente de inertia
     return Inertia::render($component, $data);
+  }
+
+  /**
+   * Devuelve una respuesta con el array de datos convertidos en json
+   *
+   * @param array $data           Los datos a pasar como json
+   * @param string $key           El nombre de la variable de session
+   * @return JsonResponse         La redirección del tipo json
+   */
+  public static function jsonResponse(array $data = [], string $key = ''): JsonResponse
+  {
+    // en caso de existir una propiedad o variable de session
+    // esta sera eliminada
+    if ($key) {
+      self::forgetProperty($key);
+    }
+
+    // la redirección de los datos en formato json
+    return response()->json($data);
   }
 }

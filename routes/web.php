@@ -46,3 +46,13 @@ Route::get('/sales/brand/{slug}', [SaleController::class, 'createWithBrand'])->n
 // Ruta para guardar una venta desde una marca
 // ---------------------------------------------------
 Route::post('/sales/brand/{brand}', [SaleController::class, 'saveWithBrand'])->name('sales.saveWithBrand');
+
+// ---------------------------------------------------
+// Ruta para marcar una venta como verificada
+// ---------------------------------------------------
+Route::put('/sales/verify/{sale}/{brand}', [SaleController::class, 'saleVerify'])->name('sales.verify');
+
+// ---------------------------------------------------
+// Ruta para obtener las ventas de una marca
+// ---------------------------------------------------
+// Route::get('/sales/getAll/{brand}', [SaleController::class, 'getAll'])->name('sales.getAll');

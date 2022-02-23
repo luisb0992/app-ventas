@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+// request
 use App\Events\SendSaleEmailNotificationEvent;
 use App\Http\Requests\CreateSaleRequest;
+
+// traits
 use App\Http\Traits\SaleTrait;
+
+// modelos
 use App\Models\Brand;
+use App\Models\Sale;
+
+// utils
 use App\Utils\AppRedirect;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +24,9 @@ use Inertia\Response as InertiaResponse;
 class SaleController extends Controller
 {
 
+    /**
+     * Traits que agrega o manipula lógica de ventas
+     */
     use SaleTrait;
 
     /**
@@ -55,7 +67,7 @@ class SaleController extends Controller
         $isFailed = DB::transaction(function () use ($data, $brand) {
 
             // Guardar y getear el nombre el comprobante
-            $data['voucher'] = $this->uploadFile($data['voucher']);
+            $data['voucher'] = $this->uploadSaleFile($data['voucher']);
 
             // crear la venta
             $sale = $brand->sales()->create($data);
@@ -75,5 +87,38 @@ class SaleController extends Controller
 
         // Eliminar la sesión de error y redirigir a la vista de creación
         return AppRedirect::forgettingProperty($route, 'failed');
+    }
+
+    /**
+     * Devuelve la vista con la venta realizada
+     *
+     * @param Sale $sale            La venta
+     * @return InertiaResponse      El componente
+     */
+    public function show(Sale $sale): InertiaResponse
+    {
+        return AppRedirect::inertiaRender('Sale/Show', [
+            'sale'     => $sale,
+        ]);
+    }
+
+    /**
+     * Marca una venta como verificada y devuelve la vista actualizada
+     *
+     * @param Sale $sale            La venta a marcar como verificada
+     * @param Brand $brand          La marca de la venta
+     * @return JsonResponse         Listado de ventas actualizado
+     */
+    public function saleVerify(Sale $sale, Brand $brand): JsonResponse
+    {
+        // marcar como verificada
+        $sale->verifySale();
+
+        // actualizar el listado de ventas
+        $currentPage = request()->get('currentPage');
+        $brand = $brand->getSalesByBrand($brand, $currentPage);
+        $sales = $brand->paginateSales;
+
+        return AppRedirect::jsonResponse($sales->toArray());
     }
 }

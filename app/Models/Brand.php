@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Traits\BrandTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Brand extends Model
 {
     use SoftDeletes;
+
+    use BrandTrait;
 
     /**
      * La tabla asociada al modelo.
@@ -38,7 +41,7 @@ class Brand extends Model
      */
     public function sales(): HasMany
     {
-        return $this->hasMany(Sale::class);
+        return $this->hasMany(Sale::class)->orderBy('created_at', 'desc');
     }
 
     /**

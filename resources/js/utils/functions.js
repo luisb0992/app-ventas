@@ -11,7 +11,8 @@
  * @param {number} longitud
  */
 export const substr = (value, longitud = 10) => {
-    return value.substr(0, longitud) + "...";
+    const characters = value.length > longitud ? '...' : '';
+    return value.substr(0, longitud) + characters;
 };
 
 /**
@@ -31,3 +32,14 @@ export const calculateSizeInMB = (value) => {
 export const replaceWordImage = (value) => {
     return value.replace("image/", "");
 };
+
+/**
+ * Devuelve un string en formato de fecha dd/mm/yyyy
+ *
+ * @param {string} value    string a convertir
+ * @returns                 string convertido a Date
+ */
+export const formatDateToDDMMYYYY = (value) => {
+    const date = new Date(value);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+}

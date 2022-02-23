@@ -37,6 +37,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'path' => [
+                'brandLogo' => env('APP_URL') . 'storage/' . config('brands.folder') . '/',
+                'saleVoucher' => env('APP_URL') . 'storage/' . config('sales.folder') . '/',
+            ],
+            'flash' => [
+                'failed' => $request->session()->get('failed'),
+            ],
         ]);
     }
 }

@@ -33,6 +33,7 @@ const confirm = reactive({
     confirm: "Si, verificar",
     info: "¿Está seguro de verificar esta venta?",
     description: "Esta acción no se puede deshacer",
+    loading: false,
 });
 
 // reactive para las ventas
@@ -70,6 +71,9 @@ const showConfirm = (id) => {
  */
 const verifySale = async () => {
     try {
+
+        confirm.loading = true;
+
         // verificar la venta
         // y actualiza el listado de ventas
         const res = await axios.put(
@@ -82,7 +86,11 @@ const verifySale = async () => {
         // actualizar el listado de ventas
         sales.data = res.data;
 
+        // modal de confirmación
         confirm.show = false;
+        confirm.loading = false;
+
+        // toast
         toast.message = "Venta verificada con éxito";
         toast.bg = "bg-green-600";
         toast.show = true;
@@ -91,6 +99,7 @@ const verifySale = async () => {
         }, 5000);
     } catch (error) {
         confirm.show = false;
+        confirm.loading = false;
         console.log(error);
     }
 };
@@ -104,6 +113,7 @@ const verifySale = async () => {
         :confirm-message="confirm.confirm"
         :info-message="confirm.info"
         :description-message="confirm.description"
+        :loading="confirm.loading"
     />
     <!-- /modal de confirmación -->
 

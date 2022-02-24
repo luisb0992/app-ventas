@@ -39,8 +39,8 @@ const spinner = reactive({
             :bg="toast.bg"
             :show="toast.show"
         />
-        <div class="py-12 bg-white">
-            <div class="max-w-full px-4 sm:px-6 lg:px-6">
+        <div class="bg-white">
+            <div class="max-w-full px-4 py-4 sm:px-6 lg:px-6">
                 <!-- header marcas -->
                 <div class="lg:text-left">
                     <h2
@@ -52,7 +52,7 @@ const spinner = reactive({
                 <!-- /header marcas -->
 
                 <!-- body marcas -->
-                <div class="mt-10">
+                <div class="mt-5">
                     <div class="sm:grid sm:gap-2 sm:grid-cols-2 md:grid-cols-3">
                         <!-- base de formulario -->
                         <div

@@ -5,7 +5,7 @@ namespace App\Events;
 use App\Models\Sale;
 use Illuminate\Queue\SerializesModels;
 
-class SendSaleEmailNotificationEvent
+class SendEmailNotifyingSaleVerifiedEvent
 {
     use SerializesModels;
 

@@ -53,3 +53,16 @@ export const formatDateToDDMMYYYY = (value) => {
 export const numberFormatES = (value) => {
     return new Intl.NumberFormat("es-ES").format(value);
 };
+
+/**
+ * Devuelve un array con una nueva key "radomKey" que va de 0 hasta size (999999)
+ *
+ * @param {Array} array         array a convertir
+ * @param {Number} size         tamaño del numero random (default: 0 - 999999)
+ * @returns                     array con la nueva randomKey
+ */
+export const randomKey = (array, size = 1000000) => {
+    const random = Math.random() * size;
+    array.map((value) => (value.randomKey = Math.floor(random)));
+    return array;
+};

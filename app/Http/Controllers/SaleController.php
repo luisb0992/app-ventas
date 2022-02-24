@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 // request
+
+use App\Events\SendEmailNotifyingSaleVerifiedEvent;
 use App\Events\SendSaleEmailNotificationEvent;
 use App\Http\Requests\CreateSaleRequest;
 
@@ -111,8 +113,20 @@ class SaleController extends Controller
      */
     public function saleVerify(Sale $sale, Brand $brand): JsonResponse
     {
-        // marcar como verificada
-        $sale->verifySale();
+
+        $isFailed = DB::transaction(function () use ($sale) {
+
+            // marcar como verificada
+            $sale->verifySale();
+
+            // notificar via email que ha sido verificado
+            event(new SendEmailNotifyingSaleVerifiedEvent($sale));
+        });
+
+        // Si hubo un error no hacer nada
+        if ($isFailed) {
+            return null;
+        }
 
         // actualizar el listado de ventas
         $currentPage = request()->get('currentPage');

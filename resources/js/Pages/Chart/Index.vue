@@ -1,15 +1,14 @@
 <script setup>
 // componentes
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import { Head } from "@inertiajs/inertia-vue3";
 import BrandListCardWithChart from "@/Pages/Chart/partials/BrandListCardWithChart.vue";
+import { Head } from "@inertiajs/inertia-vue3";
 
 // utils
-import { numberFormatES } from "@/utils/functions.js";
-import { Chart, registerables } from "chart.js";
-import { DoughnutChart, useDoughnutChart } from "vue-chart-3";
-import { computed, reactive } from "vue";
-Chart.register(...registerables);
+import { DoughnutChart } from "vue-chart-3";
+import { onMounted, reactive } from "vue";
+import { numberFormatES, randomKey } from "@/utils/functions.js";
+import { chartData, chartOptions, setData } from "@/Pages/Chart/utils/index.js";
 
 const { brands, sumAllSales } = defineProps({
     brands: {
@@ -22,116 +21,57 @@ const { brands, sumAllSales } = defineProps({
     },
 });
 
-//clases para activar o inactivar botones
-const classes = {
-    active: "py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300",
-    inactive:
-        "py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 text-gray-900 bg-white border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700",
-};
-
-// reactive data
-const dataBrand = reactive({
-    brands: brands,
+/**
+ * Objeto reactivo que contiene los datos de las marcas y sus ventas
+ *
+ * @typedef {Object} objBrand
+ */
+const objBrand = reactive({
+    brands: [],
     labels: brands.map((brand) => brand.name),
     totalSales: brands.map((brand) => brand.sumSales),
     sumAllSales: sumAllSales,
-    backgroundColor: [
-        "#3e95cd",
-        "#FF9200",
-        "#8e5ea2",
-        "#3cba9f",
-        "#c45850",
-        "#97B0C4",
-        "#123E6B",
-        "#FFB400",
-        "#28B328",
-    ],
-});
-
-// computed data doughnut
-const chartData = computed(() => ({
-    labels: dataBrand.labels,
-    datasets: [
-        {
-            data: dataBrand.totalSales,
-            backgroundColor: dataBrand.backgroundColor,
-        },
-    ],
-}));
-
-// config y data doughnut
-const { doughnutChartProps } = useDoughnutChart({
-    chartData,
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false,
-            },
-        },
-    },
 });
 
 /**
- * Filtra los datos según sea su tipo
- * Ya sea por dia, mes o año
- *
- * @param {HTMLBaseElement} event - el elemento que dispara el evento
- * @param {Number} type -           el tipo de filtro a ejecutar
+ * Función que se ejecuta al iniciar la página
  */
-const setData = async (event, type) => {
-    // desactivar todos los botones
-    document
-        .querySelectorAll("#btns button")
-        .forEach((btn) => (btn.className = classes.inactive));
-
-    // activar el botón presionado
-    event.target.className = classes.active;
-
-    try {
-        // yearly data
-        const data = await axios.get(route("brands.data.date", type));
-
-        // setear los datos principales
-        dataBrand.totalSales = await data.data.map((brand) => brand.sumSales);
-
-        // setear el monto total de ventas
-        dataBrand.sumAllSales = await data.data.reduce(
-            (total, brand) => total + brand.sumSales,
-            0
-        );
-
-        // Actualizar el componente de marcas
-        dataBrand.brands = data.data;
-        // console.log(dataBrand.sumAllSales);
-        // console.log(dataBrand.totalSales);
-        // console.log(brands);
-        // console.log(dataBrand.brands);
-
-    } catch (error) {
-        console.log(error);
-    }
-};
+onMounted(() => {
+    objBrand.brands = randomKey(brands);
+});
 </script>
 <template>
     <BreezeAuthenticatedLayout>
-        <Head title="Graficos" />
+        <Head title="Dashboard" />
 
         <div class="w-full">
             <div
                 class="px-4 py-4 animate-fade-in-down bg-white rounded-lg shadow-lg"
             >
+                <!-- sub-header marcas -->
+                <div class="lg:text-left mb-5">
+                    <h2
+                        class="text-blue-sales-1 font-semibold tracking-wide uppercase border-b-blue-sales-1 border-b-2 pb-3"
+                    >
+                        Dashboard
+                    </h2>
+                </div>
+                <!-- /sub-header marcas -->
+
                 <div class="lg:flex">
                     <!-- gráfico general -->
                     <div
-                        class="lg:w-[70%] mb-6 lg:mb-0 flex flex-col items-center justify-center w-full"
+                        class="lg:w-[65%] mb-6 lg:mb-0 flex flex-col items-center justify-center w-full"
                     >
                         <div class="flex flex-col">
-                            <DoughnutChart v-bind="doughnutChartProps" />
+                            <DoughnutChart
+                                :chartData="chartData(objBrand)"
+                                :options="chartOptions"
+                            />
                             <p
-                                class="text-blue-sales-1 font-bold text-2xl text-center py-3"
+                                class="text-blue-sales-1 font-bold text-3xl text-center py-3"
                             >
-                                $ {{ numberFormatES(dataBrand.sumAllSales) }}
+                                $ {{ numberFormatES(objBrand.sumAllSales) }}
                             </p>
                         </div>
 
@@ -140,7 +80,7 @@ const setData = async (event, type) => {
                             id="btns"
                         >
                             <button
-                                @click="setData($event, 1)"
+                                @click="setData($event, 1, objBrand)"
                                 type="button"
                                 id="btn-1"
                                 class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
@@ -148,7 +88,7 @@ const setData = async (event, type) => {
                                 Anual
                             </button>
                             <button
-                                @click="setData($event, 2)"
+                                @click="setData($event, 2, objBrand)"
                                 type="button"
                                 id="btn-2"
                                 class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
@@ -156,7 +96,7 @@ const setData = async (event, type) => {
                                 Mensual
                             </button>
                             <button
-                                @click="setData($event, 3)"
+                                @click="setData($event, 3, objBrand)"
                                 type="button"
                                 id="btn-3"
                                 class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
@@ -169,13 +109,13 @@ const setData = async (event, type) => {
 
                     <!-- listado de marcas -->
                     <div
-                        class="overflow-y-auto lg:h-[700px] lg:w-[30%] lg:px-8"
+                        class="overflow-y-auto lg:h-[700px] lg:w-[35%] lg:px-8 lg:py-5"
                     >
                         <BrandListCardWithChart
-                            v-for="brand in dataBrand.brands"
-                            :key="brand.id"
+                            v-for="brand in objBrand.brands"
+                            :key="brand.randomKey"
                             :brand="brand"
-                            :totalOtherBrandSales="dataBrand.sumAllSales - brand.sumSales"
+                            :sum-all-sales="objBrand.sumAllSales"
                         />
                     </div>
                     <!-- /listado de marcas -->

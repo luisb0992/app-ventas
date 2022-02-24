@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -24,6 +23,13 @@ class EventServiceProvider extends ServiceProvider
          */
         'App\Events\SendSaleEmailNotificationEvent' => [
             'App\Listerners\SendSaleEmailNotificationListener',
+        ],
+
+        /**
+         * Notificar que se ha verificado una venta
+         */
+        'App\Events\SendEmailNotifyingSaleVerifiedEvent' => [
+            'App\Listerners\SendEmailNotifyingSaleVerifiedListener',
         ],
     ];
 

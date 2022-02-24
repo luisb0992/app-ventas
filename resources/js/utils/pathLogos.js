@@ -4,12 +4,9 @@
  * @author Luisbardev <luisbardev@gmail.com> luisbardev.com
  */
 
-import { ref } from "vue";
+import { usePage } from "@inertiajs/inertia-vue3";
+import { computed } from "vue";
 
-const pathLogos = ref("");
-
-axios
-    .get(route("path.logos"))
-    .then((response) => (pathLogos.value = response.data));
+const pathLogos = computed(() => usePage().props.value.path.brandLogo);
 
 export default pathLogos;

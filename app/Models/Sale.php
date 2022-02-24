@@ -93,7 +93,7 @@ class Sale extends Model
      */
     public function getUsdAmountAttribute(): string
     {
-        return self::CURRENCY_USD . ' ' . number_format($this->amount, 2, ',', '.');
+        return self::CURRENCY_USD . ' ' . number_format($this->amount, 2, '.', ',');
     }
 
     /**
@@ -103,6 +103,6 @@ class Sale extends Model
      */
     public function getBsAmountAttribute(): string
     {
-        return self::CURRENCY_BS . ' ' . number_format($this->amount, 2, ',', '.');
+        return self::CURRENCY_BS . ' ' . number_format($this->amount, 2, '.', ',');
     }
 }

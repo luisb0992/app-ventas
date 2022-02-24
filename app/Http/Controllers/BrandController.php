@@ -20,6 +20,8 @@ use Inertia\Response as InertiaResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Response;
 use App\Utils\AppRedirect;
+use App\Utils\Chart;
+use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
 
 class BrandController extends Controller
@@ -131,5 +133,29 @@ class BrandController extends Controller
         return response($logo['content'])->withHeaders([
             'Content-Type' => $logo['type']
         ]);
+    }
+
+    /**
+     * Devuelve las ventas de todas las marcas sumadas por año, mes o dia actual
+     * según se indique en el $type
+     *
+     * @param integer $type         El tipo de búsqueda a efectuar (dia, mes o año)
+     * @return JsonResponse
+     */
+    public function getDataDate(int $type): JsonResponse
+    {
+        $brands = Brand::getOrderBrands();
+
+        if ($type === 1) {
+            $data = Chart::getYearlyData($brands);
+        } else if ($type === 2) {
+            $data = Chart::getMonthlyData($brands);
+        } else if ($type === 3) {
+            $data = Chart::getDailyData($brands);
+        } else {
+            $data = $brands;
+        }
+
+        return AppRedirect::jsonResponse($data->toArray());
     }
 }

@@ -11,7 +11,7 @@
  * @param {number} longitud
  */
 export const substr = (value, longitud = 10) => {
-    const characters = value.length > longitud ? '...' : '';
+    const characters = value.length > longitud ? "..." : "";
     return value.substr(0, longitud) + characters;
 };
 
@@ -42,4 +42,14 @@ export const replaceWordImage = (value) => {
 export const formatDateToDDMMYYYY = (value) => {
     const date = new Date(value);
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-}
+};
+
+/**
+ * Devuelve un string en formato es-ES de numero legible
+ *
+ * @param {number} value        numero a convertir
+ * @returns                     string convertido a un formato legible es-ES
+ */
+export const numberFormatES = (value) => {
+    return new Intl.NumberFormat("es-ES").format(value);
+};

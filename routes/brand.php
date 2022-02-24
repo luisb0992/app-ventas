@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Route;
 // Rutas de marcas
 // ----------------------
 Route::resource('/brands', BrandController::class)->middleware(['auth', 'verified']);
+
+// ----------------------
+// Ruta para actualizar una marca
+// ----------------------
 Route::post('/brands/update/{brand}', [BrandController::class, 'update'])
     ->middleware(['auth', 'verified'])
     ->name('brands.updateAll');
@@ -25,3 +29,10 @@ Route::get('/pathlogos', function () {
     $path = env('APP_URL') . 'storage/' . config('brands.folder') . '/';
     return response()->json($path);
 })->middleware(['auth', 'verified'])->name('path.logos');
+
+// --------------------------------------------------------------------------
+// Ruta para obtener las ventas de todas las marcas por año, mes o dia actual
+// --------------------------------------------------------------------------
+Route::get('/get/data/{type}', [BrandController::class, 'getDataDate'])
+    ->middleware(['auth', 'verified'])
+    ->name('brands.data.date');

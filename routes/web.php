@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -36,3 +37,24 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+// ---------------------------------------
+// ruta para mostrar el perfil de usuario
+// ---------------------------------------
+Route::get('/profile', [UserController::class, 'profile'])
+    ->middleware(['auth', 'verified'])
+    ->name('profile');
+
+// ---------------------------------------
+// ruta para actualizar el perfil de usuario
+// ---------------------------------------
+Route::put('/profile/{user}', [UserController::class, 'updateProfile'])
+    ->middleware(['auth', 'verified'])
+    ->name('profile.update');
+
+// ---------------------------------------
+// ruta para actualizar el password de usuario
+// ---------------------------------------
+Route::put('/profile/{user}', [UserController::class, 'updateProfilePassword'])
+    ->middleware(['auth', 'verified'])
+    ->name('profile.updatePass');

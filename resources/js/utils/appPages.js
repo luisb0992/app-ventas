@@ -14,6 +14,7 @@ const appPages = ref({
     profile: "/profile",
     graphics: "/graphics",
     sales: "/sales",
+    showPage: "/show",
 });
 
 export default appPages;

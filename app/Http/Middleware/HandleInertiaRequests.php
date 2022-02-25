@@ -33,9 +33,10 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+        $lastname = $request->user() ? $request->user()->lastname : null;
         return array_merge(parent::share($request), [
             'auth' => [
-                'user' => $request->user(),
+                'user' => collect($request->user())->put('fullname', $lastname),
             ],
             'path' => [
                 'brandLogo' => env('APP_URL') . 'storage/' . config('brands.folder') . '/',
@@ -44,6 +45,7 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'failed' => $request->session()->get('failed'),
             ],
+            'appName' => config('app.name'),
         ]);
     }
 }

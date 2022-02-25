@@ -1,12 +1,14 @@
 <script setup>
 // utils
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import isOpen from "@/utils/isOpen.js";
-import appName from "@/utils/appName.js";
 import appPages from "@/utils/appPages.js";
 
 // componentes
 import { Link, usePage } from "@inertiajs/inertia-vue3";
+
+// nombre de la app
+const appName = computed(() => usePage().props.value.appName);
 
 const activeClass = ref(
     "bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100"
@@ -78,10 +80,10 @@ const inPage = (value) => {
                     <small>Menú</small>
                 </p>
                 <Link
-                    :href="route('dashboard')"
+                    :href="route('profile')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[
-                        inPage(appPages.dashboard)
+                        inPage(appPages.profile)
                             ? activeClass
                             : inactiveClass,
                     ]"
@@ -107,7 +109,7 @@ const inPage = (value) => {
                     :href="route('brands.index')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[
-                        inPage(appPages.brands) ? activeClass : inactiveClass,
+                        inPage(appPages.brands) || inPage(appPages.showPage) ? activeClass : inactiveClass,
                     ]"
                     @click="isOpen = !isOpen"
                 >
@@ -131,7 +133,7 @@ const inPage = (value) => {
                     :href="route('dashboard')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[
-                        inPage(appPages.graphics) ? activeClass : inactiveClass,
+                        inPage(appPages.dashboard) ? activeClass : inactiveClass,
                     ]"
                     @click="isOpen = !isOpen"
                 >

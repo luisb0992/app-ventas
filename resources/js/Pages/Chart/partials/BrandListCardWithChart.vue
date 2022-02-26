@@ -6,7 +6,9 @@ import { Link } from "@inertiajs/inertia-vue3";
 import { substr, numberFormatES } from "@/utils/functions.js";
 import pathLogo from "@/utils/pathLogos.js";
 import { DoughnutChart } from "vue-chart-3";
+import { Chart, registerables } from "chart.js";
 import { computed, onMounted, reactive, ref } from "vue";
+Chart.register(...registerables);
 
 const { brand, sumAllSales } = defineProps({
     brand: {

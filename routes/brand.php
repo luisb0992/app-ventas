@@ -36,3 +36,10 @@ Route::get('/pathlogos', function () {
 Route::get('/get/data/{type}', [BrandController::class, 'getDataDate'])
     ->middleware(['auth', 'verified'])
     ->name('brands.data.date');
+
+// --------------------------------------------------------------------------
+// Ruta para obtener las ventas de una marca en el año seleccionado
+// --------------------------------------------------------------------------
+Route::get('/get/data/{brand}/{year}', [BrandController::class, 'getDataDateYear'])
+    ->middleware(['auth', 'verified'])
+    ->name('brands.data.dateYear');

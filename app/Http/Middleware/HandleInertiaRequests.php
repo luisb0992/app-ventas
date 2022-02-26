@@ -33,10 +33,10 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
-        $lastname = $request->user() ? $request->user()->lastname : null;
+        $fullname = $request->user() ? $request->user()->fullname : null;
         return array_merge(parent::share($request), [
             'auth' => [
-                'user' => collect($request->user())->put('fullname', $lastname),
+                'user' => collect($request->user())->put('fullname', $fullname),
             ],
             'path' => [
                 'brandLogo' => env('APP_URL') . 'storage/' . config('brands.folder') . '/',

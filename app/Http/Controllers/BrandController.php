@@ -26,7 +26,9 @@ use Inertia\Inertia;
 
 class BrandController extends Controller
 {
-
+    /**
+     * Trait BrandTrait
+     */
     use BrandTrait;
 
     /**
@@ -70,9 +72,18 @@ class BrandController extends Controller
      */
     public function show(Brand $brand): InertiaResponse
     {
+        // todas las marcas
+        $brands = Brand::getOrderBrands();
+
+        // la suma de todas las ventas de todas las marcas
+        $sumAllSales = Chart::getSumAllSales($brands);
+
+        $brand = $this->getSalesByBrand($brand)->setBrandData($brand)->setSumSalesByMonthOfTheYear($brand);
+
         return AppRedirect::inertiaRender('Brand/Show', [
-            'brand' => $this->getSalesByBrand($brand),
-            'brands' => Brand::getOrderBrands(),
+            'brand' => $brand,
+            'brands' => $brands,
+            'sumAllSales' => $sumAllSales,
         ]);
     }
 
@@ -157,5 +168,19 @@ class BrandController extends Controller
         }
 
         return AppRedirect::jsonResponse($data->toArray());
+    }
+
+    /**
+     * Devuelve las ventas de una marca sumadas por el año seleccionado
+     *
+     * @param Brand $brand              La marca
+     * @param integer $year             El año seleccionado
+     * @return JsonResponse             Las ventas de la marca por el año seleccionado
+     */
+    public function getDataDateYear(Brand $brand, int $year): JsonResponse
+    {
+        $brand = $this->setSumSalesByMonthOfTheYear($brand, $year);
+
+        return AppRedirect::jsonResponse($brand->toArray());
     }
 }

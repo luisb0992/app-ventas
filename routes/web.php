@@ -48,13 +48,13 @@ Route::get('/profile', [UserController::class, 'profile'])
 // ---------------------------------------
 // ruta para actualizar el perfil de usuario
 // ---------------------------------------
-Route::put('/profile/{user}', [UserController::class, 'updateProfile'])
+Route::put('/profile/update/{user}', [UserController::class, 'updateProfile'])
     ->middleware(['auth', 'verified'])
-    ->name('profile.update');
+    ->name('profile.updateData');
 
 // ---------------------------------------
 // ruta para actualizar el password de usuario
 // ---------------------------------------
-Route::put('/profile/{user}', [UserController::class, 'updateProfilePassword'])
+Route::put('/profile/updatepass/{user}', [UserController::class, 'updateProfilePassword'])
     ->middleware(['auth', 'verified'])
     ->name('profile.updatePass');

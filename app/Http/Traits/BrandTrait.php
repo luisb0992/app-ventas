@@ -14,6 +14,7 @@ namespace App\Http\Traits;
 
 use App\Models\Brand;
 use App\Models\Sale;
+use App\Utils\Chart;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -176,6 +177,36 @@ trait BrandTrait
         $sale->isVerified = $sale->hasItBeenVerified();
 
         return $sale;
+    }
+
+    /**
+     * Agregar keys extras necesarias a la marca
+     * para ser manipuladas en el front
+     *
+     * @param Brand $brand          El objeto de la marca
+     * @return Brand                El objeto de la marca con los datos agregados
+     */
+    public function setBrandData(Brand $brand): Brand
+    {
+        // agrega la propiedad suma de ventas
+        $brand->sumSales = $brand->sales()->sum('amount');
+
+        return $brand;
+    }
+
+    /**
+     * agrega la propiedad de la suma de ventas por cada mes de año seleccionado
+     *
+     * @param Brand $brand          El objeto de la marca
+     * @param integer $year         El año seleccionado
+     * @return Brand                El objeto de la marca con los datos agregados
+     */
+    public function setSumSalesByMonthOfTheYear(Brand $brand, int $year = 0): Brand
+    {
+        // agrega la propiedad de la suma de ventas por cada mes de año seleccionado
+        $brand->sumSalesByMonth = Chart::getSumSalesByMonth($brand, $year);
+
+        return $brand;
     }
 
     /**

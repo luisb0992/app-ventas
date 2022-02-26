@@ -6,80 +6,27 @@ import Loading from "@/Components/custom/Loading.vue";
 import Toast from "@/Components/custom/Toast.vue";
 
 // utils
-import clearAppErrors from "@/utils/clearAppErrors";
-import hasErrors from "@/utils/hasAppErrors.js";
+import {
+    updateUser,
+    loading,
+    loadingPass,
+    errorUpdateProfile,
+    errorUpdatePass,
+    toastMessage as toast,
+} from "@/Pages/User/utils/updateProfile.js";
 import { Head, useForm, usePage } from "@inertiajs/inertia-vue3";
-import { computed, ref } from "vue";
-import toast from "@/utils/toastMessage.js";
+import { computed } from "vue";
 
 const user = computed(() => usePage().props.value.auth.user);
-const loading = ref(false);
-const loadingPass = ref(false);
-const errorUpdateProfile = ref(false);
-const errorUpdatePass = ref(false);
 
 const form = useForm({
+    id: user.value.id,
     name: user.value.name,
     lastname: user.value.lastname,
     user: user.value.user,
     password: user.value.password,
 });
 
-const updateProfile = () => {
-    loading.value = true;
-    errorUpdateProfile.value = true;
-    errorUpdatePass.value = false;
-    form.put(route("profile.update", user.value.id), {
-        onFinish: () => {
-            if (!hasErrors.value) {
-                toast.message = "Perfil actualizado correctamente";
-                toast.bg = "bg-green-600";
-                toast.show = true;
-                setTimeout(() => {
-                    toast.show = false;
-                }, 5000);
-            }
-
-            loading.value = false;
-            clearAppErrors();
-        },
-        onError: () => {
-            loading.value = false;
-            clearAppErrors();
-        },
-        onProgress: () => {
-            loading.value = true;
-        },
-    });
-};
-
-const updatePass = () => {
-    loadingPass.value = true;
-    errorUpdatePass.value = true;
-    errorUpdateProfile.value = false;
-    form.put(route("profile.updatePass", user.value.id), {
-        onFinish: () => {
-            if (!hasErrors.value) {
-                toast.message = "Clave actualizada correctamente";
-                toast.bg = "bg-green-600";
-                toast.show = true;
-                setTimeout(() => {
-                    toast.show = false;
-                }, 5000);
-            }
-
-            loadingPass.value = false;
-            clearAppErrors();
-        },
-        onError: () => {
-            loadingPass.value = false;
-            clearAppErrors();
-        },
-        onProgress: () => {
-            loadingPass.value = true;
-        },
-    });
-};
 </script>
 <template>
     <BreezeAuthenticatedLayout>
@@ -116,7 +63,7 @@ const updatePass = () => {
                                 class="mb-4 bg-gray-50 border border-gray-200 rounded-lg py-6 pl-4"
                                 v-show="errorUpdateProfile"
                             />
-                            <form @submit.prevent="updateProfile">
+                            <form @submit.prevent="updateUser('profile', form)">
                                 <div class="relative z-0 mb-6 w-full group">
                                     <input
                                         type="text"
@@ -207,7 +154,7 @@ const updatePass = () => {
                                 class="mb-4 bg-gray-50 border border-gray-200 rounded-lg py-6 pl-4"
                                 v-show="errorUpdatePass"
                             />
-                            <form @submit.prevent="updatePass">
+                            <form @submit.prevent="updateUser('pass', form)">
                                 <div class="relative z-0 mb-6 w-full group">
                                     <input
                                         type="password"

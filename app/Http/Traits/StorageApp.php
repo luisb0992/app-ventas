@@ -52,13 +52,13 @@ trait StorageApp
     $extension = $file->getClientOriginalExtension();
     $filename = 'file-' . time() . '.' . $extension;
 
-    $filename = $this->storage->putFileAs(
+    $isSave = $this->storage->putFileAs(
       $folder,
       $file,
       $filename
     );
 
-    if (!$filename) {
+    if (!$isSave) {
       return null;
     }
 

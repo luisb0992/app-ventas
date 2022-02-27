@@ -202,6 +202,7 @@ const verifySale = async () => {
                         >
                             <a
                                 :href="pathVoucher + sale.voucher"
+                                download
                                 target="_blank"
                             >
                                 <svg

@@ -1548,9 +1548,6 @@ select {
 .font-light {
   font-weight: 300;
 }
-.font-extralight {
-  font-weight: 200;
-}
 .uppercase {
   text-transform: uppercase;
 }
@@ -1685,9 +1682,6 @@ select {
 }
 .opacity-25 {
   opacity: 0.25;
-}
-.opacity-75 {
-  opacity: 0.75;
 }
 .opacity-70 {
   opacity: 0.7;
@@ -1866,12 +1860,6 @@ select {
   --tw-text-opacity: 1;
   color: rgb(30 64 175 / var(--tw-text-opacity));
 }
-.hover\:opacity-100:hover {
-  opacity: 1;
-}
-.hover\:opacity-0:hover {
-  opacity: 0;
-}
 .focus\:z-10:focus {
   z-index: 10;
 }
@@ -1938,9 +1926,6 @@ select {
 .focus\:text-blue-700:focus {
   --tw-text-opacity: 1;
   color: rgb(29 78 216 / var(--tw-text-opacity));
-}
-.focus\:opacity-100:focus {
-  opacity: 1;
 }
 .focus\:outline-none:focus {
   outline: 2px solid transparent;

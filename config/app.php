@@ -175,6 +175,12 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // firebase
+        // Kreait\Laravel\Firebase\ServiceProvider::class,
+
+        // Dropbox filesystem
+        // App\Providers\DropboxServiceProvider::class,
+
     ],
 
     /*

@@ -1,7 +1,9 @@
 # Test
 
 //....
-<!-- [APP DEMO](https://luisbardev-cuestionario.herokuapp.com/) -->
+[APP DEMO](https://app-ventas-3j.herokuapp.com/)
+- user: admin
+- pass: password
 
 ## Langs
 

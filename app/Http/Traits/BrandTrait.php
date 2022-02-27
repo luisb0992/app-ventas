@@ -16,7 +16,6 @@ use App\Models\Brand;
 use App\Models\Sale;
 use App\Utils\Chart;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

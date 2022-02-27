@@ -54,7 +54,7 @@ onMounted(() => doughnutRef.value.update());
 </script>
 <template>
     <div
-        class="bg-white rounded-lg shadow-lg border border-gray-200 py-4 px-4 w-full animate-fade-in-down w-full h-full flex flex-col items-center justify-center"
+        class="bg-white rounded-lg shadow-lg border border-gray-200 py-4 px-4 w-full animate-fade-in-down h-full flex flex-col items-center justify-center"
     >
         <div class="flex flex-col items-center justify-center mb-5">
             <Link

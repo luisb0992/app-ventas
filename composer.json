@@ -1,7 +1,7 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "3J Corp",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
@@ -49,6 +49,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "post-install-cmd": [
+            "ln -sr storage/app/public public/storage"
         ]
     },
     "extra": {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Utils\AppFilePath;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -34,13 +35,14 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         $fullname = $request->user() ? $request->user()->fullname : null;
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => collect($request->user())->put('fullname', $fullname),
             ],
             'path' => [
-                'brandLogo' => env('APP_URL') . 'storage/' . config('brands.folder') . '/',
-                'saleVoucher' => env('APP_URL') . 'storage/' . config('sales.folder') . '/',
+                'brandLogo' => AppFilePath::brandLogos(),
+                'saleVoucher' => AppFilePath::saleVouchers(),
             ],
             'flash' => [
                 'failed' => $request->session()->get('failed'),

@@ -7,9 +7,7 @@ namespace App\Http\Controllers;
 use App\Events\SendEmailNotifyingSaleVerifiedEvent;
 use App\Events\SendSaleEmailNotificationEvent;
 use App\Http\Requests\CreateSaleRequest;
-
-// traits
-use App\Http\Traits\SaleTrait;
+use App\Http\Traits\StorageApp;
 
 // modelos
 use App\Models\Brand;
@@ -27,9 +25,9 @@ class SaleController extends Controller
 {
 
     /**
-     * Traits que agrega o manipula lógica de ventas
+     * Trait para manipular la instancia de storage
      */
-    use SaleTrait;
+    use StorageApp;
 
     /**
      * Devuelve el componente de creación de la venta
@@ -64,12 +62,18 @@ class SaleController extends Controller
     {
         $data = $request->all();
 
-        // SI todo salió bien, guardar el voucher
-        // guardar la venta y enviar el correo
         $isFailed = DB::transaction(function () use ($data, $brand) {
 
             // Guardar y getear el nombre el comprobante
-            $data['voucher'] = $this->uploadSaleFile($data['voucher']);
+            $filename = $this->uploadFile($data['voucher'], config('sales.folder'));
+
+            // si no se pudo subir el archivo, se retorna  un error
+            if (!$filename) {
+                return true;
+            }
+
+            // setear el nombre del archivo
+            $data['voucher'] = $filename;
 
             // crear la venta
             $sale = $brand->sales()->create($data);

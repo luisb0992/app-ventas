@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BrandController;
+use App\Utils\AppFilePath;
 use Illuminate\Support\Facades\Route;
 
 // ----------------------
@@ -26,7 +27,7 @@ Route::get('/get/logo/{brand}', [BrandController::class, 'getLogo'])
 // Ruta que responde al path de logos de las marcas
 // -------------------------------------------------
 Route::get('/pathlogos', function () {
-    $path = env('APP_URL') . 'storage/' . config('brands.folder') . '/';
+    $path = AppFilePath::brandLogos();
     return response()->json($path);
 })->middleware(['auth', 'verified'])->name('path.logos');
 

@@ -78,7 +78,9 @@ class BrandController extends Controller
         // la suma de todas las ventas de todas las marcas
         $sumAllSales = Chart::getSumAllSales($brands);
 
-        $brand = $this->getSalesByBrand($brand)->setBrandData($brand)->setSumSalesByMonthOfTheYear($brand);
+        $brand = $this->getSalesByBrand($brand)
+            ->setBrandData($brand)
+            ->setSumSalesByMonthOfTheYear($brand);
 
         return AppRedirect::inertiaRender('Brand/Show', [
             'brand' => $brand,

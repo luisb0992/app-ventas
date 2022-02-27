@@ -135,6 +135,12 @@ const setFilterChart = async (event, type) => {
                         {{ brand.name }}
                     </h2>
                 </div>
+                <div class="mb-6 rounded-lg border border-gray-200 w-full p-4">
+                    <div class="text-blue-sales-1 text-xl tracking-wide font-light">Link para ventas</div>
+                    <a :href="route('sales.createWithBrand', brand.slug)" class="opacity-70 no-underline hover:text-blue-sales-1 hover:border-gray-300">
+                        {{ route('sales.createWithBrand', brand.slug) }}
+                    </a>
+                </div>
                 <!-- /sub-header marca -->
 
                 <!-- Gráficos -->

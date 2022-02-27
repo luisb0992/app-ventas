@@ -153,7 +153,7 @@ const inPage = (value) => {
                     </svg>
                     <span class="mx-2">Gráficos</span>
                 </Link>
-                <Link
+                <!-- <Link
                     :href="route('sales.createWithBrand', 'asus')"
                     class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 text-white"
                     :class="[
@@ -176,7 +176,7 @@ const inPage = (value) => {
                         />
                     </svg>
                     <span class="mx-2">Ventas</span>
-                </Link>
+                </Link> -->
             </nav>
             <!-- /links -->
         </div>

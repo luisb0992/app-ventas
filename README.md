@@ -1,7 +1,7 @@
 # Test
 
 //....
-[APP DEMO](https://app-ventas-3j.herokuapp.com/)
+[APP DEMO](http://app-ventas-3j.herokuapp.com/)
 - user: admin
 - pass: password
 

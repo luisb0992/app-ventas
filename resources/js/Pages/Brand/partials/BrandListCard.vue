@@ -16,7 +16,7 @@ defineProps({
 </script>
 <template>
     <div
-        class="bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 py-8 w-full mb-3 mx-auto animate-fade-in-down"
+        class="bg-white rounded-lg border border-gray-200 shadow-md py-8 w-full mb-3 mx-auto animate-fade-in-down"
         v-for="brand in brands"
         :key="brand.id"
     >
@@ -31,7 +31,7 @@ defineProps({
                     alt="Logo Marca"
                 />
                 <h3
-                    class="text-gray-900 dark:text-white font-medium sm:hidden xl:block text-xl xl:text-lg text-center hover:text-blue-sales-1"
+                    class="text-gray-900 font-medium sm:hidden xl:block text-xl xl:text-lg text-center hover:text-blue-sales-1"
                 >
                     {{ substr(brand.name) }}
                 </h3>

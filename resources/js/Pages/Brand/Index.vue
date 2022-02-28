@@ -14,6 +14,7 @@ import { Head } from "@inertiajs/inertia-vue3";
 import pathLogos from "@/utils/pathLogos.js";
 import { form } from "@/Pages/Brand/utils/useForm.js";
 import toast from '@/utils/toastMessage.js';
+import { substr } from "@/utils/functions.js";
 
 // listado de props
 const { brands } = defineProps({
@@ -68,7 +69,7 @@ const spinner = reactive({
                         <!-- listado de marcas -->
                         <div class="mt-3 sm:mt-0 overflow-y-auto md:h-[700px]">
                             <div
-                                class="bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 px-6 py-8 w-full lg:w-2/3 mb-3 mx-auto animate-fade-in-down"
+                                class="rounded-lg border border-gray-200 shadow-md px-6 py-8 w-full lg:w-2/3 mb-3 mx-auto animate-fade-in-down"
                                 v-for="brand in brands"
                                 :key="brand.id"
                             >
@@ -83,9 +84,9 @@ const spinner = reactive({
                                             alt="Logo Marca"
                                         />
                                         <h3
-                                            class="mb-1 text-gray-900 dark:text-white lg:text-lg xl:text-lg font-medium sm:hidden xl:block text-center hover:text-blue-sales-1"
+                                            class="mb-1 text-gray-900 lg:text-lg xl:text-lg font-medium sm:hidden xl:block text-center hover:text-blue-sales-1"
                                         >
-                                            {{ brand.name }}
+                                            {{ substr(brand.name) }}
                                         </h3>
                                     </Link>
                                     <div class="flex mt-4 space-x-3">

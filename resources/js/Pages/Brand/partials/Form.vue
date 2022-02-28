@@ -250,7 +250,7 @@ const closeToast = () => {
                     <button
                         :disabled="loading.show"
                         type="submit"
-                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 border-gray-200"
+                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 border-gray-200"
                         :class="
                             form.update
                                 ? 'bg-yellow-500 text-gray-800 hover:bg-yellow-600 hover:text-gray-900'
@@ -265,7 +265,7 @@ const closeToast = () => {
                         v-if="form.update"
                         @click="clearForm"
                         type="button"
-                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 border-gray-200 animate-fade-in-down bg-white text-blue-sales-1 hover:bg-gray-100 hover:text-blue-sales-1"
+                        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium rounded-full border focus:z-10 focus:ring-2 border-gray-200 animate-fade-in-down bg-white text-blue-sales-1 hover:bg-gray-100 hover:text-blue-sales-1"
                     >
                         <span>Limpiar</span>
                     </button>

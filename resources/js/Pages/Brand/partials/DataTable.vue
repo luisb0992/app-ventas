@@ -120,37 +120,37 @@ const verifySale = async () => {
     <!-- tabla de datos -->
     <div>
         <table
-            class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700"
+            class="min-w-full divide-y divide-gray-200 table-fixed"
         >
-            <thead class="bg-gray-100 dark:bg-gray-700 text-center">
+            <thead class="bg-gray-100 text-center">
                 <tr>
                     <th
                         scope="col"
-                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase dark:text-gray-400"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase"
                     >
                         Servicio
                     </th>
                     <th
                         scope="col"
-                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase dark:text-gray-400"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase"
                     >
                         Cantidad
                     </th>
                     <th
                         scope="col"
-                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase dark:text-gray-400"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase"
                     >
                         Monto
                     </th>
                     <th
                         scope="col"
-                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase dark:text-gray-400"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase"
                     >
                         Comprobante
                     </th>
                     <th
                         scope="col"
-                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase dark:text-gray-400"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-gray-700 uppercase"
                     >
                         Status
                     </th>
@@ -160,7 +160,7 @@ const verifySale = async () => {
                 </tr>
             </thead>
             <tbody
-                class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700 text-center"
+                class="bg-white divide-y divide-gray-200 text-center"
             >
                 <tr>
                     <td colspan="6" v-if="!sales.data.data.length">
@@ -174,27 +174,27 @@ const verifySale = async () => {
                     </td>
                 </tr>
                 <tr
-                    class="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    class="hover:bg-gray-100"
                     v-for="sale in sales.data.data"
                     :key="sale.id"
                 >
                     <td
-                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
                         {{ sale.service }}
                     </td>
                     <td
-                        class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white"
+                        class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap"
                     >
                         {{ sale.count }}
                     </td>
                     <td
-                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
                         {{ sale.usd_amount }}
                     </td>
                     <td
-                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
                         <span
                             v-if="sale.voucher"
@@ -237,7 +237,7 @@ const verifySale = async () => {
                         </span>
                     </td>
                     <td
-                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
                     >
                         <span v-if="sale.isVerified" class="text-green-400">
                             Activo -
